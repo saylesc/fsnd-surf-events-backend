@@ -14,8 +14,6 @@ cryptography==2.8
 dbus-python==1.2.16
 distlib==0.3.1
 distro==1.4.0
-duplicity==0.8.12.0
-ecdsa==0.13.2
 entrypoints==0.3
 fasteners==0.14.1
 feedparser==5.2.1
@@ -32,7 +30,6 @@ html5lib==1.0.1
 httplib2==0.14.0
 idna==2.8
 isort==4.3.18
-itsdangerous==1.1.0
 Jinja2==2.10.1
 keyring==18.0.1
 language-selector==0.1
