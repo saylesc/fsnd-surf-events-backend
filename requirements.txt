@@ -32,10 +32,6 @@ idna==2.8
 isort==4.3.18
 Jinja2==2.10.1
 keyring==18.0.1
-language-selector==0.1
-launchpadlib==1.10.13
-lazr.restfulclient==0.14.2
-lazr.uri==1.0.3
 lazy-object-proxy==1.4.0
 lockfile==0.12.2
 louis==3.12.0
