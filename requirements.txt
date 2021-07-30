@@ -35,8 +35,6 @@ keyring==18.0.1
 numpy==1.17.4
 oauthlib==3.1.0
 olefile==0.46
-onboard==1.4.1
-pbr==5.6.0
 pexpect==4.6.0
 Pillow==7.0.0
 postgres==3.0.0
