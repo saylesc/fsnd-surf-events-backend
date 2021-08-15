@@ -73,7 +73,7 @@ class SurfEventsTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(len(data['surf_spots']))
 
-    def test_surf_spots(self):
+    def test_method_not_allowed_surf_spots(self):
         res = self.client().patch('/surf_spots')
         data = json.loads(res.data)
 
