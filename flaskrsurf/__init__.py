@@ -35,16 +35,14 @@ def create_app(test_config=None):
             })
 
         except:
-            print(sys.exc_info())
-            abort(400)
+            return bad_request(400)
 
     @app.route('/surfers/<int:surfer_id>', methods=['GET'])
     def get_surfer(surfer_id):
         try:
             surfer = Surfer.query.get(surfer_id)
             if surfer is None:
-                # TODO: abort in 2 places, how to prevent?
-                abort(404)
+                return no_resource(404)
 
             return jsonify({
                 "success": True,
@@ -52,7 +50,7 @@ def create_app(test_config=None):
             })
 
         except:
-            abort(404)
+            return no_resource(404)
 
     ### GET SURF SPOTS
     @app.route('/surf_spots', methods=['GET'])
@@ -92,19 +90,16 @@ def create_app(test_config=None):
         try:
             contest = SurfContest.query.get(contest_id)
 
+            # unprocessable(422, "")
             if not contest:
-                abort(404)
+                return no_resource(404)
 
             return jsonify({
                 "success": True,
                 "surf_contest": contest.format()
             })
         except:
-            # TODO: throw better error
-            return jsonify({
-                "success": False,
-                "message": "Could not get contest"
-            })
+            return unprocessable(422)
 
     ### GET specific SURF Spots
     @app.route('/surf_spots/<int:spot_id>')
@@ -113,18 +108,14 @@ def create_app(test_config=None):
             spot = SurfSpot.query.get(spot_id)
 
             if not spot:
-                abort(404)
+                return no_resource(404)
 
             return jsonify({
                 "success": True,
                 "surf_spot": spot.format()
             })
         except:
-            # TODO: throw better error
-            return jsonify({
-                "success": False,
-                "message": "Could not get contest"
-            })
+            return unprocessable(422)
 
 
     ### GET specific SURF Contests hosted at a specific spot
@@ -134,7 +125,7 @@ def create_app(test_config=None):
             surfSpot = SurfSpot.query.get(spot_id)
 
             if not surfSpot:
-                abort(404)
+                return no_resource(404)
 
             contest_resp = []
             contests = surfSpot.contests
@@ -149,8 +140,7 @@ def create_app(test_config=None):
             })
 
         except:
-            # TODO: 404?
-            abort(400)
+            return unprocessable(422)
 
 
     ### POST to search for specific Surfers
@@ -195,11 +185,11 @@ def create_app(test_config=None):
             else:
                 contest = SurfContest.query.get(contest_id)
                 if not contest:
-                    abort(404)
+                    return no_resource(404)
 
                 surfer = Surfer.query.get(surfer_id)
                 if not surfer:
-                    abort(404)
+                    return no_resource(404)
 
                 # If surfer is not already entered, enter them
                 foundContest = False
@@ -208,11 +198,7 @@ def create_app(test_config=None):
                         foundContest = True
 
                 if foundContest:
-                    # TODO: Return error message here
-                    return jsonify({
-                        "success": False,
-                        "message": "Surfer already entered in contest"
-                    })
+                    return unprocessable(422, "Surfer is already entered in contest")
 
                 surfer.contests.append(contest)
                 surfer.update()
@@ -228,9 +214,8 @@ def create_app(test_config=None):
                     "surfers": surferSearchResults
                 })
         except:
-            print(sys.exc_info())
             rollback_db()
-            abort(422)
+            return unprocessable(422)
 
     @app.route('/remove_surf_contestant/<int:contest_id>/<int:surfer_id>', methods=['PATCH'])
     @requires_auth('patch:remove_surfer')
@@ -242,11 +227,11 @@ def create_app(test_config=None):
             else:
                 contest = SurfContest.query.get(contest_id)
                 if not contest:
-                    abort(404)
+                    return no_resource(404)
 
                 surfer = Surfer.query.get(surfer_id)
                 if not surfer:
-                    abort(404)
+                    return no_resource(404)
 
                 # If surfer is not already entered, enter them
                 if surfer in contest.surfers:
@@ -264,15 +249,10 @@ def create_app(test_config=None):
                     })
 
                 else:
-                    # TODO: Return error message here
-                    return jsonify({
-                        "success": False,
-                        "message": "Surfer is not entered in contest"
-                    })
+                    return unprocessable(422, "Surfer is not entered in contest")
         except:
-            print(sys.exc_info())
             rollback_db()
-            abort(422)
+            return unprocessable(422)
 
 
     ### Surf Coordinator API
@@ -319,7 +299,6 @@ def create_app(test_config=None):
                     "surf_spots": listSurfSpots
                 })
         except:
-            print(sys.exc_info())
             error = True
             errorDescr = "Error creating new Surf Spot"
 
@@ -373,7 +352,6 @@ def create_app(test_config=None):
                         "surf_contests": listSurfContests
                     })
         except:
-            print(sys.exc_info())
             error = True
             errorDescr = "Error creating new Surf Contest"
 
@@ -401,7 +379,7 @@ def create_app(test_config=None):
                 surfContest = SurfContest.query.get(contest_id)
 
                 if not surfContest:
-                    abort(404)
+                    return no_resource(404)
 
                 # Get the json body to update the surf contest
                 if 'surf_spot_id' in body:
@@ -435,15 +413,9 @@ def create_app(test_config=None):
                     "surf_contests": listSurfContests
             })
         except:
-            print(sys.exc_info())
-            error = True
-            errorDescr = "Error editing Surf Contest"
+            errorDescr = "Could not edit Surf Contest"
 
-        # TODO: Return error code here instead
-        return jsonify({
-            "success": False,
-            "message": errorDescr
-        })
+        return unprocessable(422, errorDescr)
 
     '''
     DELETE route for taking surf spots off the tour (Deleting surf spots)
@@ -488,7 +460,6 @@ def create_app(test_config=None):
                         "surf_spots": listSurfSpots
                     })
         except:
-            print(sys.exc_info())
             rollback_db()
             return jsonify({
                     "success": False,
@@ -527,21 +498,22 @@ def create_app(test_config=None):
                     })
         except:
             rollback_db()
-            print(sys.exc_info())
             error = True
 
 
     # Error Handlers for various API Error codes
     @app.errorhandler(422)
-    def unprocessable(error):
+    # def unprocessable(error):
+    def unprocessable(error, description="Unprocessable entity"):
         return jsonify({
             "success": False,
             "error": 422,
-            "message": "unprocessable"
+            "message": "unprocessable",
+            "description": description
         }), 422
 
     @app.errorhandler(400)
-    def bad_request(error):
+    def bad_request(error, description="Bad Request"):):
         return jsonify({
             "success": False,
             "error": 400,

@@ -776,7 +776,7 @@
 	"variable": [
 		{
 			"key": "host",
-			"value": "localhost:5000",
+			"value": "https://capstone-surf-events.herokuapp.com/",
 			"type": "string"
 		}
 	]
