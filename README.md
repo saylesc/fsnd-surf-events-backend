@@ -1,6 +1,8 @@
 # Description
 
 FSND Surf now has an API for staff to mange the various surf events taking place around the globe.
+We opened our API to the public and give Surf Coordinator and Managers a utility to quickly access
+key Surf Events.
 
 # API
 
@@ -16,6 +18,38 @@ The URL for the API is located at https://capstone-surf-events.herokuapp.com/sur
 
 - View Surf Contests
   Example: curl -X GET https://capstone-surf-events.herokuapp.com/surf_contests
+
+```
+{
+    "success":true,
+    "surf_spots":[
+        {
+            "city":"Oaxaca",
+            "country":"Mexico",
+            "id":1,
+            "name":"Barra de la Cruz",
+            "state":"N/A",
+            "wave_image":"https://d3qf8nvav5av0u.cloudfront.net/image/6c61c6bfe9f3aa5ef089dae6d336cd04.jpg",
+            "wave_type":"Rocky Right Point Break"},
+        {
+            "city":"Ballina",
+            "country":"Australia",
+            "id":3,
+            "name":"Lennox Head",
+            "state":"New South Wales",
+            "wave_image":"https://i0.heartyhosting.com/www.surfer.com/wp-content/uploads/2017/02/Safety-Not-Guaranteed_LennoxHead_Shield.jpg",
+            "wave_type":"Larger Right Point Break"},
+        {
+            "city":"Cape Canaveral",
+            "country":"USA",
+            "id":5,
+            "name":"Playalinda",
+            "state":"FL",
+            "wave_image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3aaWHaOtRM9JXl2IVAcLWDysWvjsiRbQHFqmsSAf4ShmS8j3AHN95I9TLxsPWVApAkSk&usqp=CAU","wave_type":"Beachbreak"
+        }
+    ]
+}
+
 - View Specific Surf Contests
   Example: curl -X GET https://capstone-surf-events.herokuapp.com/surf_contests/1
 - View Surf Spots
@@ -55,11 +89,13 @@ The URL for the API is located at https://capstone-surf-events.herokuapp.com/sur
 Errors in our API are returned as JSON objects. Here's an example of an error from a 'Bad request':
 
 ```
+
 {
-    "success": False,
-    "error": 400,
-    "message": "Bad request"
+"success": False,
+"error": 400,
+"message": "Bad request"
 }
+
 ```
 
 The API will return three error types when requests fail:
@@ -70,3 +106,4 @@ The API will return three error types when requests fail:
 - 404: Resource Not Found
 - 405: Not Allowed
 - 422: Not Processable/Unprocessable
+```
