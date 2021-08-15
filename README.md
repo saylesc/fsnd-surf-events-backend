@@ -12,7 +12,7 @@ FSND-Surf is invested in creating an API that is available to the public, as wel
 
 ## API URL
 
-The URL for the API is located at https://capstone-surf-events.herokuapp.com/surf_contests
+The URL for the API is located at https://capstone-surf-events.herokuapp.com/login
 
 ## PUBLIC API URL
 
