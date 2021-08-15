@@ -14,6 +14,8 @@ import json
 # Connect to postgresql database specified by the DATABASE_URL env var
 db = SQLAlchemy()
 database_path = os.environ['DATABASE_URL']
+if database_path.startswith("postgres://"):
+    database_path = database_path.replace("postgres://", "postgresql://", 1)
 
 db = SQLAlchemy()
 
