@@ -6,7 +6,7 @@ from sqlalchemy import Column, String, create_engine
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
+from flask_migrate import Migrate
 import datetime
 import os
 import json
@@ -27,8 +27,6 @@ def setup_db(app, database_path=database_path):
     db.app = app
     db.init_app(app)
     migrate = Migrate(app, db)
-    manager = Manager(app)
-    manager.add_command('db', MigrateCommand)
 
 '''
 rollback_db()
