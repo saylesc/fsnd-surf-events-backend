@@ -513,7 +513,7 @@ def create_app(test_config=None):
         }), 422
 
     @app.errorhandler(400)
-    def bad_request(error, description="Bad Request"):):
+    def bad_request(error, description="Bad Request"):
         return jsonify({
             "success": False,
             "error": 400,
