@@ -1,0 +1,783 @@
+{
+	"info": {
+		"_postman_id": "d8633886-e6d8-4398-b500-b06ed1886b2a",
+		"name": "surf-events-fsnd",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "public",
+			"item": [
+				{
+					"name": "/surfers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surfers array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surfers).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/surfers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surfers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surfers/iD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surfer_info object\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surfer_info).to.be.an('Object')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/surfers/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surfers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surfers/search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surfer_info object\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surfers).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"search_term\": \"aN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/surfers/search",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surfers",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surf_spots",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surf_spots array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surf_spots).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/surf_spots",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surf_spots"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surf_spots/ID/contests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surf_contest array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surf_contests).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/surf_spots/1/contests",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surf_spots",
+								"1",
+								"contests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surf_contests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surf_contests array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surf_contests).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/surf_contests",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surf_contests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surf_contests/iD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surf_contest array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surf_contest).to.be.an('Object')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/surf_contests/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surf_contests",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surf_contest/addSurferNotAllowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 since no credentials are present\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/add_surf_contestant/4/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"add_surf_contestant",
+								"4",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/addSurferNotAllowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 since no credentials are present\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"recipe\": [\n        {\n          \"color\": \"maroon\", \n          \"parts\": 1\n        }, \n        {\n          \"color\": \"brown\", \n          \"parts\": 1\n        }, \n        {\n          \"color\": \"black\", \n          \"parts\": 1\n        }\n      ], \n      \"title\": \"CorySpicyChileLatte\"\n    }"
+						},
+						"url": {
+							"raw": "{{host}}/add_surf_contestant/1/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"add_surf_contestant",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SurfManager",
+			"item": [
+				{
+					"name": "/surf_contest/createUnauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 since credentials are valid, but permission is not present\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"surf_spot_id\": 2,\n    \"contest_name\": \"Cory XCEL Pro\",\n    \"contest_date\": \"2021-08-14\",\n    \"contest_image\": \"test.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/surf_contest/create",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surf_contest",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surf_contest/addSurfer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains contest_info array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.contest_info).to.be.an('Object')",
+									"});",
+									"",
+									"pm.test(\"value contains surfers\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surfers).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/add_surf_contestant/3/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"add_surf_contestant",
+								"3",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surf_contest/removeSurfer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains contest_info array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.contest_info).to.be.an('Object')",
+									"});",
+									"",
+									"pm.test(\"value contains surfers\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surfers).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/remove_surf_contestant/3/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"remove_surf_contestant",
+								"3",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surf_contest/editNotAllowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 since credentials are valid, but permission is not present\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"surf_spot_id\": 3,\n    \"contest_image\": \"test.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/surf_contests/3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surf_contests",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTMzOTQ5NTc3ODc3NDA4Nzk3MDIiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2Mjg5NjkyMDMsImV4cCI6MTYyODk3NjQwMywiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsicGF0Y2g6YWRkX3N1cmZlciIsInBhdGNoOnJlbW92ZV9zdXJmZXIiXX0.IA3dLoYinRvdXYZi9TyA3GjOi3rfmD2dald_mbgXugvNgWn-loX_wdrx5fhKWApjlk3DCrI4vJfsSYX4thGp1LYBoA6zTvvyAsHCGbaIKhL0WeI0pZzzx3y0HXzmbTciPaXoX-LYxoU9xczk50MRewmPoIRmBRZWqbkWjS2Ee9EpfOtI1b6sFr2TSB3y0VMXqK623LSBIL1n4Dzf9GCH5JYP7r5Ui-zRfqjfrJR9QJBXolAGvtK7MpkHTDjAMhVFazr7KJZSoSudgAkfRr2MOIL_-FE-Mw1IxRiQTEUKKC6B2lQI613dfHv1XB0GVcBAirsuwtN-cBlHRICGpM1yTg",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "SurfCoordinator",
+			"item": [
+				{
+					"name": "/surf_spot/create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surf_spots array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surf_spots).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"name\": \"Playalinda\",\n\"city\": \"Cape Canaveral\",\n\"state\": \"FL\",\n\"country\": \"USA\",\n\"wave_type\": \"Beachbreak\",\n\"wave_image\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3aaWHaOtRM9JXl2IVAcLWDysWvjsiRbQHFqmsSAf4ShmS8j3AHN95I9TLxsPWVApAkSk&usqp=CAU\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/surf_spot/create",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surf_spot",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/surf_contest/create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surf_contests array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surf_contests).to.be.an('array')",
+									"});",
+									"",
+									"pm.test(\"value contains contest_count\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.contest_count).to.be.an('Number')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"surf_spot_id\": 2,\n    \"contest_name\": \"Cory XCEL Pro\",\n    \"contest_date\": \"2021-08-14\",\n    \"contest_image\": \"test.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/surf_contest/create",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surf_contest",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/deleteSurfContest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surf_contests array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surf_contests).to.be.an('array')",
+									"});",
+									"",
+									"pm.test(\"value contains deleted id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.deleted).to.be.eq(3)",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/surf_contests/3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surf_contests",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/deleteSurfSpot",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains surf_spots array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.surf_spots).to.be.an('array')",
+									"});",
+									"",
+									"pm.test(\"value contains deleted id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.deleted).to.be.eq(2)",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/surf_spots/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"surf_spots",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTc1OTk3NTk0ODIxODcwMzM5MTMiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2Mjg5NjY4ODEsImV4cCI6MTYyODk3NDA4MSwiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOnN1cmZfY29udGVzdHMiLCJkZWxldGU6c3VyZl9zcG90cyIsInBhdGNoOmFkZF9zdXJmZXIiLCJwYXRjaDpyZW1vdmVfc3VyZmVyIiwicGF0Y2g6c3VyZl9jb250ZXN0IiwicG9zdDpzdXJmX2NvbnRlc3RzIiwicG9zdDpzdXJmX3Nwb3RzIl19.d0h_Pe0dCvxOZJyEDtNwDTBR-XEhXKIJMUWkmjvvrG64fdvYcdhr9Zh8zlVcExaYy8jywngCymIzael7Rg4IeQGNCxYknmnR0JLHIMetoMJ18gPUgvahmheKxY9pu7AU8cfgTb5hUH8US24BSviEdBLa8vsyvH18wdXMK53tlDVeCYVfYXRkIzWJvj0wEYnCgBxMyEGzZK79QlxFwUv44kbFFdPue1Q83YYELhQh-9_Jtfn4pJN2DHxhKPwfQ0zbF6bMjO8QcmpfeBzTzM2ZHjBXBsnpnhtbvgSp3X57UFmQEA59L9xYsiSV3q27gLpMR4ew9GgyybvwNAp3LdCiLQ",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "localhost:5000",
+			"type": "string"
+		}
+	]
+}
