@@ -1,5 +1,5 @@
 alembic==1.6.5
-click==8.0.1
+click==7.1.2
 ecdsa==0.17.0
 Flask==1.1.4
 Flask-Cors==3.0.10
@@ -8,8 +8,8 @@ Flask-Script==2.0.6
 Flask-SQLAlchemy==2.5.1
 greenlet==1.1.1
 gunicorn==20.1.0
-itsdangerous==2.0.1
-Jinja2==3.0.1
+itsdangerous==1.1.0
+Jinja2==2.11.3
 jose==1.0.0
 Mako==1.1.4
 MarkupSafe==2.0.1
@@ -21,4 +21,4 @@ python-jose==3.3.0
 rsa==4.7.2
 six==1.16.0
 SQLAlchemy==1.4.22
-Werkzeug==2.0.1
+Werkzeug==1.0.1

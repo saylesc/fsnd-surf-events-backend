@@ -10,6 +10,8 @@ FSND-Surf is invested in creating an API that is available to the public, as wel
 
 ## PUBLIC API
 
+The URL for the API is located at https://capstone-surf-events.herokuapp.com/surf_contests
+
 #### Anyone can:
 
 - View Surf Contests
@@ -30,12 +32,10 @@ FSND-Surf is invested in creating an API that is available to the public, as wel
 #### Surf Managers can perform all Public API calls plus the following:
 
 - Enter surfers into Surf Contests
-
-#####
-
-Example: curl -X PATCH -H https://capstone-surf-events.herokuapp.com/add_surf_contestant/3/6
+  Example: curl -X PATCH -H https://capstone-surf-events.herokuapp.com/add_surf_contestant/3/6
 
 - Remove surfers from a Surf Contest
+  Example: curl -X PATCH -H https://capstone-surf-events.herokuapp.com/remove_surf_contestant/3/6
 
 ## Surf Coordinators
 
