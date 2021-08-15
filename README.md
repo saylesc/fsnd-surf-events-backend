@@ -10,13 +10,16 @@ key Surf Events.
 
 FSND-Surf is invested in creating an API that is available to the public, as well as official staff members. The public can now gain access to the information about our surf Events - including surfers, surf locations, and contests.
 
-## PUBLIC API
+## API URL
 
 The URL for the API is located at https://capstone-surf-events.herokuapp.com/surf_contests
+
+## PUBLIC API URL
 
 #### Anyone can:
 
 - View Surf Contests
+
   Example: curl -X GET https://capstone-surf-events.herokuapp.com/surf_contests
 
 ```
@@ -49,6 +52,7 @@ The URL for the API is located at https://capstone-surf-events.herokuapp.com/sur
         }
     ]
 }
+```
 
 - View Specific Surf Contests
   Example: curl -X GET https://capstone-surf-events.herokuapp.com/surf_contests/1
@@ -57,8 +61,10 @@ The URL for the API is located at https://capstone-surf-events.herokuapp.com/sur
 - View All Surfers
   Example: curl -X GET https://capstone-surf-events.herokuapp.com/surfers
 - Search for Surfers
+  Using the `/surfers/search` API call, you can pass in search terms to find surfers by name.
   Example: curl -X POST -H "Content-Type: application/json" -d '{"search_term":"Kel"}' https://capstone-surf-events.herokuapp.com/surfers/search
 - View Individual Surfer Info
+  You can also filter by specific surfers using the id
   Example: curl -X GET https://capstone-surf-events.herokuapp.com/surfers/2
 
 ## Surf Manager
@@ -106,4 +112,28 @@ The API will return three error types when requests fail:
 - 404: Resource Not Found
 - 405: Not Allowed
 - 422: Not Processable/Unprocessable
-```
+
+## Setting up the Authentication
+
+Setting up your own version of this API is easy with the help of Auth0.
+
+1.  Create a new application and API on https://manage.auth0.com
+2.  Add a new Role representing a Surf Manager with the following permissions:
+    - patch:add_surfer
+    - patch:remove_surfer
+3.  Add a new Role representing a Surf Coordinator with the following permissions:
+    - post:surf_spots
+    - post:surf_contests
+    - patch:surf_contest
+    - delete:surf_spots
+    - delete:surf_contests
+4.  Generate a JWT token using your Auth0 Applicaton URL so that you can access the JWT
+    Example https://fsnd-saylesc.us.auth0.com/authorize?audience=fsnd-surf-events&response_type=token&client_id=mqAYej6cSzNiLs53o6lHBaGvQTNPseaQ&redirect_uri=https://127.0.0.1:5000/login
+5.  Based on the users credentials and assigned roles, the redirected page will provide the appropriate JWT
+
+## Testing endpoints with Postman
+
+https://www.postman.com/
+
+You can set up your own tests by starting with our test endpoints: `surf-events_postman_collection.json`
+You can import this collection into Postman and modify the {{host}} and the authentication using the JWTs generated form the previous steps.
