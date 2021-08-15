@@ -71,6 +71,8 @@ The URL for the API is located at https://capstone-surf-events.herokuapp.com/log
 
 #### Surf Managers can perform all Public API calls plus the following:
 
+Sample JWT token for testing endpoints: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTMzOTQ5NTc3ODc3NDA4Nzk3MDIiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2MjkwNTg2NTksImV4cCI6MTYyOTEwMTg1OSwiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsicGF0Y2g6YWRkX3N1cmZlciIsInBhdGNoOnJlbW92ZV9zdXJmZXIiXX0.HvO2M2q-iVS0FeP2ErVDviw-EphWKSniogLtndrG-RrepEPKSSvUsmhGcOBk8zBaz-_PqbLBHDwjEUmwsDO3BkN4jKWvXaS9pSR6-FL-Jbr2Yt6SpyUyoYRjvkra65RG_QBx0ILlA63yjny1O5UeWGe-2FKNC6IjUWH0_GbQbmgJcruwdDttvDvCWzggI1H-g7A_0QPp8iehD6A4UNJoznnRAq4ZoeU_7ZoejIOFf0rmDDmY4v1kkN1f2TqcK4TV42xTVze8nTpgVZWsvmmiZH0iplVmwnaPSZQP4JB9bkSLT8ELQ_tljp04Fzp0vr_0JBVHsM8IeK393qQZcHsZHA`
+
 - Enter surfers into Surf Contests
   Example: curl -X PATCH -H https://capstone-surf-events.herokuapp.com/add_surf_contestant/3/6
 
@@ -80,6 +82,8 @@ The URL for the API is located at https://capstone-surf-events.herokuapp.com/log
 ## Surf Coordinators
 
 #### Surf Coordinators can perform all Public API calls plus the following:
+
+Sample JWT token for testing endpoints: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTc1OTk3NTk0ODIxODcwMzM5MTMiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2MjkwNTg1MTgsImV4cCI6MTYyOTEwMTcxOCwiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOnN1cmZfY29udGVzdHMiLCJkZWxldGU6c3VyZl9zcG90cyIsInBhdGNoOmFkZF9zdXJmZXIiLCJwYXRjaDpyZW1vdmVfc3VyZmVyIiwicGF0Y2g6c3VyZl9jb250ZXN0IiwicG9zdDpzdXJmX2NvbnRlc3RzIiwicG9zdDpzdXJmX3Nwb3RzIl19.oHYahJxA7dBP4CwGyKQxSfDp3vQ5HM5z2N56Nh1nQTM0cACpP2obMi8FSw7_Xl7zt3MD9eoQT2swYGOy5xKPOa6g6xKrp4h4nfq2uJwXyME6h5wscZhIfG2iukHQo77zI1nv-XVTZFAfEcrj2cDcYVNlgGjbUho55K8M-SFS7_gVG_DwEvAOD-9F31HwQEF6h4lVBzaSdibifg3OMeiGP6Yyq9JiqWq_DvM7ri99QQ63VikksFbRVU3wpMIQTL2NkWs1BAOFzwkl33pAmoQRO_e5I8SmuAB_pP-QHfEQx9TdtdPleF4ni6ZUKJ50shCaFjGkQYzzYZJSfZy_HCIg6g`
 
 - Create Surf Contests
 - Cancel (Delete) Surf Contests
@@ -131,9 +135,10 @@ Setting up your own version of this API is easy with the help of Auth0.
     Example https://fsnd-saylesc.us.auth0.com/authorize?audience=fsnd-surf-events&response_type=token&client_id=mqAYej6cSzNiLs53o6lHBaGvQTNPseaQ&redirect_uri=https://127.0.0.1:5000/login
 5.  Based on the users credentials and assigned roles, the redirected page will provide the appropriate JWT
 
-## Testing endpoints with Postman
+## API Testing endpoints with Postman
 
-https://www.postman.com/
+Create a Postman account and test the API Endpoints live: https://www.postman.com/
 
+The App has been set up to run on Heroku, and the sample postman collection uses the URL: https://capstone-surf-events.herokuapp.com/login
 You can set up your own tests by starting with our test endpoints: `surf-events_postman_collection.json`
 You can import this collection into Postman and modify the {{host}} and the authentication using the JWTs generated form the previous steps.
