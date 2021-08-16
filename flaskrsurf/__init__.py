@@ -1,19 +1,21 @@
-import os, sys
+import os
+import sys
 from flask import Flask, request, jsonify, abort
 from models import setup_db, rollback_db, SurfSpot, Surfer, SurfContest
 from auth.auth import AuthError, requires_auth
 from flask_cors import CORS
 
+
+# Create app, setup DB, apply CORS
 def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
 
-
-    # ROUTES
-
-    ## PUBLIC GET API
-    ''' The default GET API's for any public user'''
+    ''' ROUTES
+        PUBLIC GET API
+            The default GET API's for any public user
+    '''
     @app.route('/login')
     def hello_home():
         return jsonify({
@@ -21,7 +23,7 @@ def create_app(test_config=None):
             "message": "Hello! From the Surf Events page"
         })
 
-    ### GET SURFERS
+    ''' GET SURFERS'''
     @app.route('/surfers', methods=['GET'])
     def get_surfers():
         try:
@@ -35,7 +37,7 @@ def create_app(test_config=None):
             })
 
         except:
-            return bad_request(400)
+            return no_resource(404)
 
     @app.route('/surfers/<int:surfer_id>', methods=['GET'])
     def get_surfer(surfer_id):
@@ -52,7 +54,7 @@ def create_app(test_config=None):
         except:
             return no_resource(404)
 
-    ### GET SURF SPOTS
+    ''' GET SURF SPOTS '''
     @app.route('/surf_spots', methods=['GET'])
     def get_surf_spots():
         try:
@@ -66,9 +68,9 @@ def create_app(test_config=None):
             })
 
         except:
-            abort(400)
+            return no_resource(404)
 
-    ### GET SURF Contests
+    ''' GET SURF Contests '''
     @app.route('/surf_contests', methods=['GET'])
     def get_all_surf_contests():
         try:
@@ -82,15 +84,14 @@ def create_app(test_config=None):
             })
 
         except:
-            abort(400)
+            return no_resource(404)
 
-    ### GET specific SURF Contests
+    ''' GET specific SURF Contests '''
     @app.route('/surf_contests/<int:contest_id>')
     def get_surf_contest(contest_id):
         try:
             contest = SurfContest.query.get(contest_id)
 
-            # unprocessable(422, "")
             if not contest:
                 return no_resource(404)
 
@@ -101,7 +102,7 @@ def create_app(test_config=None):
         except:
             return unprocessable(422)
 
-    ### GET specific SURF Spots
+    ''' GET specific SURF Spots'''
     @app.route('/surf_spots/<int:spot_id>')
     def get_surf_spot(spot_id):
         try:
@@ -117,8 +118,7 @@ def create_app(test_config=None):
         except:
             return unprocessable(422)
 
-
-    ### GET specific SURF Contests hosted at a specific spot
+    '''GET specific SURF Contests hosted at a specific spot'''
     @app.route('/surf_spots/<int:spot_id>/contests', methods=['GET'])
     def get_surf_spot_contests(spot_id):
         try:
@@ -142,14 +142,12 @@ def create_app(test_config=None):
         except:
             return unprocessable(422)
 
-
-    ### POST to search for specific Surfers
+    '''POST to search for specific Surfers'''
     @app.route('/surfers/search', methods=['POST'])
     def search_surfers():
         body = request.get_json()
         surferSearchTerm = body['search_term'].lower()
         searchTerm = "%{}%".format(surferSearchTerm)
-        error = False
         surferSearchResults = []
         try:
             surfers = Surfer.query.filter(Surfer.name.ilike(searchTerm)).all()
@@ -162,19 +160,23 @@ def create_app(test_config=None):
                 "surfers": surferSearchResults
             })
         except:
-            error = True
+            return jsonify({
+                "success": True,
+                "count": len(surfers),
+                "surfers": surferSearchResults
+            })
 
-
-    ## RESTRICTED ACCESS API
     '''
+    RESTRICTED ACCESS API
     The GET/PATCH/POST/DELETE API's for Surf Coordinator and Surf Manager users
-    '''
 
-    ### Surf Manager API
-    '''
+    Surf Manager API
     Surf Managers can only add/remove surfers to/from a surf contest
     '''
 
+    '''
+    Add surfers to contests
+    '''
     @app.route('/add_surf_contestant/<int:contest_id>/<int:surfer_id>', methods=['PATCH'])
     @requires_auth('patch:add_surfer')
     def add_surfer_to_contest(payload, contest_id, surfer_id):
@@ -207,7 +209,6 @@ def create_app(test_config=None):
                 for contestSurfer in contest.surfers:
                     surferSearchResults.append(contestSurfer.format())
 
-
                 return jsonify({
                     "success": True,
                     "contest_info": contest.format(),
@@ -217,6 +218,9 @@ def create_app(test_config=None):
             rollback_db()
             return unprocessable(422)
 
+    '''
+    Remove surfers from contests
+    '''
     @app.route('/remove_surf_contestant/<int:contest_id>/<int:surfer_id>', methods=['PATCH'])
     @requires_auth('patch:remove_surfer')
     def remove_surfer_from_contest(payload, contest_id, surfer_id):
@@ -254,15 +258,12 @@ def create_app(test_config=None):
             rollback_db()
             return unprocessable(422)
 
+    '''Surf Coordinator API'''
 
-    ### Surf Coordinator API
-
-    # POST route for adding  Surf Spots to the tour
+    '''POST route for adding  Surf Spots to the tour'''
     @app.route('/surf_spot/create', methods=['POST'])
     @requires_auth('post:surf_spots')
     def create_surf_spot(payload):
-        createError = False
-        errorDescr = ''
         try:
             if type(payload) is AuthError:
                 return auth_error(payload)
@@ -299,16 +300,9 @@ def create_app(test_config=None):
                     "surf_spots": listSurfSpots
                 })
         except:
-            error = True
-            errorDescr = "Error creating new Surf Spot"
+            return unprocessable(422, "Unable to create new Surf Spot")
 
-        # TODO: Return error code here instead
-        return jsonify({
-            "success": False,
-            "message": errorDescr
-        })
-
-    # POST route for Creating Surf Contests
+    '''POST route for Creating Surf Contests'''
     @app.route('/surf_contest/create', methods=['POST'])
     @requires_auth('post:surf_contests')
     def create_surf_contest(payload):
@@ -327,7 +321,7 @@ def create_app(test_config=None):
 
                 # Find the surf spot this contest will be held at
                 surfSpot = SurfSpot.query.get(surfSpotId)
-                if surfSpot == None:
+                if surfSpot is None:
                     errorDescr += 'Surf Spot not found. '
                     createError = True
 
@@ -355,13 +349,9 @@ def create_app(test_config=None):
             error = True
             errorDescr = "Error creating new Surf Contest"
 
-        # TODO: Return error code here instead
-        return jsonify({
-            "success": False,
-            "message": errorDescr
-        })
+        return unprocessable(422, errorDescr)
 
-    # PATCH route for Editing Surf Contests
+    '''PATCH route for Editing Surf Contests'''
     @app.route('/surf_contests/<int:contest_id>', methods=['PATCH'])
     @requires_auth('patch:surf_contest')
     def edit_surf_contest(payload, contest_id):
@@ -411,7 +401,7 @@ def create_app(test_config=None):
                     "success": True,
                     "contest_count": len(surfContests),
                     "surf_contests": listSurfContests
-            })
+                })
         except:
             errorDescr = "Could not edit Surf Contest"
 
@@ -466,7 +456,7 @@ def create_app(test_config=None):
                     "message": "Could not delete Surf Spot"
                 })
 
-    # DELETE route for removing (Cancelling/Postponing) Surf Contests
+    '''DELETE route for removing (Cancelling/Postponing) Surf Contests'''
     @app.route('/surf_contests/<int:contest_id>', methods=['DELETE'])
     @requires_auth('delete:surf_contests')
     def delete_surf_contest(payload, contest_id):
@@ -500,10 +490,8 @@ def create_app(test_config=None):
             rollback_db()
             error = True
 
-
-    # Error Handlers for various API Error codes
+    '''Error Handlers for various API Error codes'''
     @app.errorhandler(422)
-    # def unprocessable(error):
     def unprocessable(error, description="Unprocessable entity"):
         return jsonify({
             "success": False,
@@ -517,9 +505,9 @@ def create_app(test_config=None):
         return jsonify({
             "success": False,
             "error": 400,
-            "message": "Bad Request."
+            "message": "Bad Request.",
+            "description": description
         }, 400)
-
 
     @app.errorhandler(401)
     def unauthorized(error):
@@ -528,7 +516,6 @@ def create_app(test_config=None):
             "error": 401,
             "message": "Unauthorized."
         }, 401)
-
 
     @app.errorhandler(403)
     def forbidden_error(error):
@@ -554,8 +541,8 @@ def create_app(test_config=None):
             "message": authError.error
         }), authError.status_code
 
-
     return app
+
 app = create_app()
 
 if __name__ == '__main__':
