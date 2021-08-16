@@ -116,30 +116,30 @@ class SurfContest(db.Model):
         'Surfer', secondary=surfer_contests, backref=db.backref('contests', lazy=True)
     )
 
-  def __init__(self, name, date, image, spotId):
-      self.contest_name = name
-      self.contest_date = date
-      self.contest_image = image
-      self.surfSpotId = spotId
+    def __init__(self, name, date, image, spotId):
+        self.contest_name = name
+        self.contest_date = date
+        self.contest_image = image
+        self.surfSpotId = spotId
 
-  def insert(self):
-      db.session.add(self)
-      db.session.commit()
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
 
-  def update(self):
-      db.session.commit()
+    def update(self):
+        db.session.commit()
 
-  def delete(self):
-      db.session.delete(self)
-      db.session.commit()
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
-  def format(self):
-      return {
-          'id': self.id,
-          'contest_name': self.contest_name,
-          'contest_date': self.contest_date,
-          'contest_image': self.contest_image
-      }
+    def format(self):
+        return {
+            'id': self.id,
+            'contest_name': self.contest_name,
+            'contest_date': self.contest_date,
+            'contest_image': self.contest_image
+        }
 
 '''
 Surfers
