@@ -36,7 +36,7 @@ def create_app(test_config=None):
                 "surfers": surfers_resp
             })
 
-        except:
+        except Exception:
             return no_resource(404)
 
     @app.route('/surfers/<int:surfer_id>', methods=['GET'])
@@ -51,7 +51,7 @@ def create_app(test_config=None):
                 "surfer_info": surfer.format()
             })
 
-        except:
+        except Exception:
             return no_resource(404)
 
     ''' GET SURF SPOTS '''
@@ -67,7 +67,7 @@ def create_app(test_config=None):
                 "surf_spots": surfspot_resp
             })
 
-        except:
+        except Exception:
             return no_resource(404)
 
     ''' GET SURF Contests '''
@@ -83,7 +83,7 @@ def create_app(test_config=None):
                 "surf_contests": surfcontests_resp
             })
 
-        except:
+        except Exception:
             return no_resource(404)
 
     ''' GET specific SURF Contests '''
@@ -99,7 +99,7 @@ def create_app(test_config=None):
                 "success": True,
                 "surf_contest": contest.format()
             })
-        except:
+        except Exception:
             return unprocessable(422)
 
     ''' GET specific SURF Spots'''
@@ -115,7 +115,7 @@ def create_app(test_config=None):
                 "success": True,
                 "surf_spot": spot.format()
             })
-        except:
+        except Exception:
             return unprocessable(422)
 
     '''GET specific SURF Contests hosted at a specific spot'''
@@ -139,7 +139,7 @@ def create_app(test_config=None):
                 "surf_contests": contest_resp
             })
 
-        except:
+        except Exception:
             return unprocessable(422)
 
     '''POST to search for specific Surfers'''
@@ -159,7 +159,7 @@ def create_app(test_config=None):
                 "count": len(surfers),
                 "surfers": surferSearchResults
             })
-        except:
+        except Exception:
             return jsonify({
                 "success": True,
                 "count": len(surfers),
@@ -177,7 +177,8 @@ def create_app(test_config=None):
     '''
     Add surfers to contests
     '''
-    @app.route('/add_surf_contestant/<int:contest_id>/<int:surfer_id>', methods=['PATCH'])
+    @app.route('/add_surf_contestant/<int:contest_id>/<int:surfer_id>',
+               methods=['PATCH'])
     @requires_auth('patch:add_surfer')
     def add_surfer_to_contest(payload, contest_id, surfer_id):
         try:
@@ -200,7 +201,9 @@ def create_app(test_config=None):
                         foundContest = True
 
                 if foundContest:
-                    return unprocessable(422, "Surfer is already entered in contest")
+                    return unprocessable(
+                        422,
+                        "Surfer is already entered in contest")
 
                 surfer.contests.append(contest)
                 surfer.update()
@@ -214,14 +217,15 @@ def create_app(test_config=None):
                     "contest_info": contest.format(),
                     "surfers": surferSearchResults
                 })
-        except:
+        except Exception:
             rollback_db()
             return unprocessable(422)
 
     '''
     Remove surfers from contests
     '''
-    @app.route('/remove_surf_contestant/<int:contest_id>/<int:surfer_id>', methods=['PATCH'])
+    @app.route('/remove_surf_contestant/<int:contest_id>/<int:surfer_id>',
+               methods=['PATCH'])
     @requires_auth('patch:remove_surfer')
     def remove_surfer_from_contest(payload, contest_id, surfer_id):
         try:
@@ -253,8 +257,10 @@ def create_app(test_config=None):
                     })
 
                 else:
-                    return unprocessable(422, "Surfer is not entered in contest")
-        except:
+                    return unprocessable(
+                        422,
+                        "Surfer is not entered in contest")
+        except Exception:
             rollback_db()
             return unprocessable(422)
 
@@ -299,7 +305,7 @@ def create_app(test_config=None):
                     "surf_spot_count": len(listSurfSpots),
                     "surf_spots": listSurfSpots
                 })
-        except:
+        except Exception:
             return unprocessable(422, "Unable to create new Surf Spot")
 
     '''POST route for Creating Surf Contests'''
@@ -334,7 +340,8 @@ def create_app(test_config=None):
 
                     newContest.insert()
 
-                    surfContests = SurfContest.query.order_by(SurfContest.id).all()
+                    surfContests = SurfContest.query.order_by(
+                        SurfContest.id).all()
                     listSurfContests = []
 
                     for contest in surfContests:
@@ -345,7 +352,7 @@ def create_app(test_config=None):
                         "contest_count": len(surfContests),
                         "surf_contests": listSurfContests
                     })
-        except:
+        except Exception:
             error = True
             errorDescr = "Error creating new Surf Contest"
 
@@ -402,7 +409,7 @@ def create_app(test_config=None):
                     "contest_count": len(surfContests),
                     "surf_contests": listSurfContests
                 })
-        except:
+        except Exception:
             errorDescr = "Could not edit Surf Contest"
 
         return unprocessable(422, errorDescr)
@@ -449,7 +456,7 @@ def create_app(test_config=None):
                         "surf_spot_count": len(listSurfSpots),
                         "surf_spots": listSurfSpots
                     })
-        except:
+        except Exception:
             rollback_db()
             return jsonify({
                     "success": False,
@@ -474,7 +481,8 @@ def create_app(test_config=None):
                     # Delete this contest
                     surfContest.delete()
 
-                    surfContests = SurfContest.query.order_by(SurfContest.id).all()
+                    surfContests = SurfContest.query.order_by(
+                        SurfContest.id).all()
                     listSurfContests = []
 
                     for contest in surfContests:
@@ -486,7 +494,7 @@ def create_app(test_config=None):
                         "contest_count": len(surfContests),
                         "surf_contests": listSurfContests
                     })
-        except:
+        except Exception:
             rollback_db()
             error = True
 
@@ -542,6 +550,7 @@ def create_app(test_config=None):
         }), authError.status_code
 
     return app
+
 
 app = create_app()
 

@@ -30,18 +30,27 @@ def setup_db(app, database_path=database_path):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-''' rollback_db() rolls back the db '''
 
-
+# rollback_db() rolls back the db
 def rollback_db():
     db.session.rollback()
 
-'''
-Surf Spot / Surf Location
-'''
+class CrudSurfClass(db.Model):
+    __abstract__ = True
 
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
 
-class SurfSpot(db.Model):
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+# Surf Spot / Surf Location
+class SurfSpot(CrudSurfClass):
     __tablename__ = 'SurfSpot'
 
     id = Column(db.Integer, primary_key=True)
@@ -67,17 +76,6 @@ class SurfSpot(db.Model):
         self.wave_type = waveType
         self.wave_image = waveImage
 
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
     def format(self):
         return {
             'id': self.id,
@@ -89,23 +87,32 @@ class SurfSpot(db.Model):
             'wave_image': self.wave_image
           }
 
-''' This is an intermediate table to connect the surfers to the contests'''
+
+# This is an intermediate table to connect the surfers to the contests
 surfer_contests = db.Table('surfer_contests',
-    db.Column('surfer_id', db.Integer, db.ForeignKey('Surfer.id'), primary_key=True),
-    db.Column('contest_id', db.Integer, db.ForeignKey('SurfContest.id'), primary_key=True)
-)
+                           db.Column(
+                                    'surfer_id',
+                                    db.Integer,
+                                    db.ForeignKey('Surfer.id'),
+                                    primary_key=True),
+                           db.Column(
+                                    'contest_id',
+                                    db.Integer,
+                                    db.ForeignKey('SurfContest.id'),
+                                    primary_key=True)
+                           )
 
-'''
-Surf Contests
-'''
 
-
-class SurfContest(db.Model):
+# Surf Contests
+class SurfContest(CrudSurfClass):
     __tablename__ = 'SurfContest'
 
     id = db.Column(db.Integer, primary_key=True)
     contest_name = db.Column(db.String, nullable=False)
-    contest_date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+    contest_date = db.Column(
+                            db.DateTime,
+                            nullable=False,
+                            default=datetime.datetime.now())
     contest_image = Column(db.String(500))
     # Foreign key reference to this contest's surf spot/location
     surfSpotId = db.Column(
@@ -113,7 +120,9 @@ class SurfContest(db.Model):
         db.ForeignKey('SurfSpot.id'),
         nullable=False)
     surfers = db.relationship(
-        'Surfer', secondary=surfer_contests, backref=db.backref('contests', lazy=True)
+                            'Surfer',
+                            secondary=surfer_contests,
+                            backref=db.backref('contests', lazy=True)
     )
 
     def __init__(self, name, date, image, spotId):
@@ -121,17 +130,6 @@ class SurfContest(db.Model):
         self.contest_date = date
         self.contest_image = image
         self.surfSpotId = spotId
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
 
     def format(self):
         return {
@@ -141,10 +139,9 @@ class SurfContest(db.Model):
             'contest_image': self.contest_image
         }
 
-'''
-Surfers
-'''
-class Surfer(db.Model):
+
+# Surfers
+class Surfer(CrudSurfClass):
     __tablename__ = 'Surfer'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -160,17 +157,6 @@ class Surfer(db.Model):
         self.stance = stance
         self.hometown = hometown
         self.ranking = ranking
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
 
     def format(self):
         return {
