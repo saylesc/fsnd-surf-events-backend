@@ -16,7 +16,6 @@ AUTHORIZATION = 'Authorization'
 BEARER = 'bearer'
 
 
-
 # AuthError Exception
 '''
 AuthError Exception
@@ -39,6 +38,7 @@ Get_token_auth_header() method
     raises an AuthError if the header is malformed
     return the token part of the header
 '''
+
 
 def get_token_auth_header():
     auth = request.headers.get(AUTHORIZATION, None)
@@ -78,7 +78,8 @@ check_permissions(permission, payload) method
         payload: decoded jwt payload
 
     Raises an AuthError if permissions are not included in the payload
-        or if the requested permission string is not in the payload permissions array
+        or if the requested permission string is not in the payload
+        permissions array
 '''
 
 
@@ -110,6 +111,7 @@ verify_decode_jwt(token) method
     validates the claims
     return the decoded payload
 '''
+
 
 def verify_decode_jwt(token):
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
@@ -178,6 +180,7 @@ requires_auth(permission) decorator method
     return the decorator which passes the decoded payload to the
         decorated method
 '''
+
 
 def requires_auth(permission=''):
     def requires_auth_decorator(f):

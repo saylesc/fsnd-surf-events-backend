@@ -3,7 +3,7 @@ import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 
-from flaskr import create_app
+from flaskrsurf import create_app
 from models import setup_db, SurfSpot, SurfContest, Surfer
 
 

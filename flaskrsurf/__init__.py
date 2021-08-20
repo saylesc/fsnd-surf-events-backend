@@ -8,6 +8,8 @@ from flask_cors import CORS
 
 # Create app, setup DB, apply CORS
 def create_app(test_config=None):
+    print("__name__ = ")
+    print(__name__)
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
@@ -550,7 +552,6 @@ def create_app(test_config=None):
         }), authError.status_code
 
     return app
-
 
 app = create_app()
 

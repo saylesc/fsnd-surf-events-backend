@@ -10,9 +10,35 @@ key Surf Events.
 
 FSND-Surf is invested in creating an API that is available to the public, as well as official staff members. The public can now gain access to the information about our surf Events - including surfers, surf locations, and contests.
 
-## API URL
+## Getting Started
+
+### API URL
 
 The URL for the API is located at https://capstone-surf-events.herokuapp.com/login
+
+## Tech Stack (Dependencies)
+
+Our tech stack will include the following:
+
+- **virtualenv** as a tool to create isolated Python environments
+  - flask db init
+  - flask db migrate
+  - flask db uprade
+- **SQLAlchemy ORM** to be our ORM library of choice
+- **PostgreSQL** as our database of choice
+- **Python3** and **Flask** as our server language and server framework
+- **Flask-Migrate** for creating and running schema migrations
+  You can download and install the dependencies mentioned above using `pip` as:
+
+#### PIP Dependencies
+
+Setup a virtual environment and install all necessary dependencies for this application using the following command:
+
+```
+pip install -r requirements.txt
+```
+
+This will install all of the required packages.
 
 ## PUBLIC API URL
 

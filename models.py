@@ -35,6 +35,7 @@ def setup_db(app, database_path=database_path):
 def rollback_db():
     db.session.rollback()
 
+
 class CrudSurfClass(db.Model):
     __abstract__ = True
 
@@ -48,6 +49,7 @@ class CrudSurfClass(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
 
 # Surf Spot / Surf Location
 class SurfSpot(CrudSurfClass):
