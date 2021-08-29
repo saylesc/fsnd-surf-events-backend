@@ -47,13 +47,47 @@ This will install all of the required packages.
 createdb surf-events
 ```
 
+### Create test database:
+
+Unit Testing the API is discussed at the bottom of this README.
+Let's go ahead and create a test database for later use.
+
+```
+createdb surf-events_test
+```
+
 ### Setup Database using migrations
 
 ```
 flask db uprade
 ```
 
+## Insert Sample Data
+
+The app comes with a sample database (psql) script you can run to insert sample data.
+
+- Run the sample psql script to insert some initial test data into your database
+
+  `psql -f surfEvents.sql surf_events`
+
+- Run the same sample psql script to insert some initial test data into your TEST database
+
+  `psql -f surfEvents.sql surf_events_test`
+
 ## Running the server
+
+Change to the base backend directory
+
+```
+cd fsnd-surf-events-backend
+```
+
+Modify the setup script to point to your local database.
+Replace the following line with your local database URL.
+
+```
+export DATABASE_URL=postgresql://postgres:postgres@localhost:5432/surf_events
+```
 
 Source the setup
 
@@ -77,7 +111,7 @@ The URL for the API is located at https://capstone-surf-events.herokuapp.com/log
 ### Local API URL
 
 When you run the flask application locally, the URl for the
-URL for the API is located at https://localhost/login
+URL for the API is located at https://localhost:5000/login
 
 ## PUBLIC API
 
@@ -311,7 +345,7 @@ Surf managers can only add and remove surfers from surf contests using the below
 
 - Adds a specific surfer to a contest on the FSND Surf Tour.
 - Sample curl:
-- curl -X PATCH http://localhost:5000/add_surf_contestant/1/1
+- curl -X PATCH -H "Authorization: Bearer ${JWT_TOKEN}" http://localhost:5000/add_surf_contestant/1/1
 - Sample response output:
 
 ```
@@ -347,28 +381,259 @@ Surf managers can only add and remove surfers from surf contests using the below
 }
 ```
 
-Sample JWT token for testing endpoints: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTMzOTQ5NTc3ODc3NDA4Nzk3MDIiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2MjkwNTg2NTksImV4cCI6MTYyOTEwMTg1OSwiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsicGF0Y2g6YWRkX3N1cmZlciIsInBhdGNoOnJlbW92ZV9zdXJmZXIiXX0.HvO2M2q-iVS0FeP2ErVDviw-EphWKSniogLtndrG-RrepEPKSSvUsmhGcOBk8zBaz-_PqbLBHDwjEUmwsDO3BkN4jKWvXaS9pSR6-FL-Jbr2Yt6SpyUyoYRjvkra65RG_QBx0ILlA63yjny1O5UeWGe-2FKNC6IjUWH0_GbQbmgJcruwdDttvDvCWzggI1H-g7A_0QPp8iehD6A4UNJoznnRAq4ZoeU_7ZoejIOFf0rmDDmY4v1kkN1f2TqcK4TV42xTVze8nTpgVZWsvmmiZH0iplVmwnaPSZQP4JB9bkSLT8ELQ_tljp04Fzp0vr_0JBVHsM8IeK393qQZcHsZHA`
+### PATCH '/remove_surf_contestant/<int:contest_id>/<int:surfer_id>',
 
-- Enter surfers into Surf Contests
-  Example: curl -X PATCH -H https://capstone-surf-events.herokuapp.com/add_surf_contestant/3/6
+- Removes a specific surfer from a specific contest on the FSND Surf Tour.
+- Sample curl:
+- curl -X PATCH -H "Authorization: Bearer ${JWT_TOKEN}" http://localhost:5000/remove_surf_contestant/1/1
+- Sample response output:- Sample response output:
 
-- Remove surfers from a Surf Contest
-  Example: curl -X PATCH -H https://capstone-surf-events.herokuapp.com/remove_surf_contestant/3/6
+```
+{
+  "contest_info": {
+    "contest_date": "Tue, 10 Aug 2021 00:00:00 GMT",
+    "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+    "contest_name": "Corys Trestles Pro",
+    "id": 1
+  },
+  "success": true,
+  "surfers": []
+}
+```
+
+- Sample response output if surfer not registered (or already removed):
+
+```
+{
+  "description": "Surfer is not entered in contest",
+  "error": 422,
+  "message": "unprocessable",
+  "success": false
+}
+```
 
 ## Surf Coordinators
 
-#### Surf Coordinators can perform all Public API calls plus the following:
+Surf Coordinators can perform all Public API calls as well as Surf Manager API calls
+Surf Coordinators can:
 
-Sample JWT token for testing endpoints: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTc1OTk3NTk0ODIxODcwMzM5MTMiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2MjkwNTg1MTgsImV4cCI6MTYyOTEwMTcxOCwiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOnN1cmZfY29udGVzdHMiLCJkZWxldGU6c3VyZl9zcG90cyIsInBhdGNoOmFkZF9zdXJmZXIiLCJwYXRjaDpyZW1vdmVfc3VyZmVyIiwicGF0Y2g6c3VyZl9jb250ZXN0IiwicG9zdDpzdXJmX2NvbnRlc3RzIiwicG9zdDpzdXJmX3Nwb3RzIl19.oHYahJxA7dBP4CwGyKQxSfDp3vQ5HM5z2N56Nh1nQTM0cACpP2obMi8FSw7_Xl7zt3MD9eoQT2swYGOy5xKPOa6g6xKrp4h4nfq2uJwXyME6h5wscZhIfG2iukHQo77zI1nv-XVTZFAfEcrj2cDcYVNlgGjbUho55K8M-SFS7_gVG_DwEvAOD-9F31HwQEF6h4lVBzaSdibifg3OMeiGP6Yyq9JiqWq_DvM7ri99QQ63VikksFbRVU3wpMIQTL2NkWs1BAOFzwkl33pAmoQRO_e5I8SmuAB_pP-QHfEQx9TdtdPleF4ni6ZUKJ50shCaFjGkQYzzYZJSfZy_HCIg6g`
-
+- Add new Surf Spots to host Contests on the FSND Surf Tour.
+- Remove Surf Spots (Delete) from the FSND Surf Tour.
 - Create Surf Contests
 - Cancel (Delete) Surf Contests
-  curl -X DELETE https://capstone-surf-events.herokuapp.com/surf_contests/3
+- Modify Surf Contest details
 - Edit Surf Contest details
 
-- Add new Surf Spots to host Contests
-- Remove Surf Spots (Delete) from the tour
-- Enter / Remove surfers into Surf Contests
+### POST '/surf_spot/create'
+
+- Adds a new surf spot to the FSND Surf Tour.
+- Sample curl:
+- curl -X POST -H "Authorization: Bearer ${JWT_TOKEN}" http://localhost:5000/surf_spot/create -H "Content-Type: application/json" -d \
+  '{"name": "Playalinda","city": "Cape Canaveral","state": "FL","country": "USA","wave_type": "Beachbreak","wave_image": "test.png"}' \
+  http://localhost:5000/surf_spot/create
+- Sample response output:
+
+```
+{
+  "success": true,
+  "surf_spot_count": 4,
+  "surf_spots": [
+    {
+      "city": "Oaxaca",
+      "country": "Mexico",
+      "id": 1,
+      "name": "Barra de la Cruz",
+      "state": "N/A",
+      "wave_image": "https://d3qf8nvav5av0u.cloudfront.net/image/6c61c6bfe9f3aa5ef089dae6d336cd04.jpg",
+      "wave_type": "Rocky Right Point Break"
+    },
+    {
+      "city": "San Onofre",
+      "country": "U.S.A",
+      "id": 2,
+      "name": "Lower Trestles",
+      "state": "CA",
+      "wave_image": "https://d3qf8nvav5av0u.cloudfront.net/image/5f8dfb006ab4cb4e27a4bde419b0fcbf.png",
+      "wave_type": "High Performance Left or Right"
+    },
+    {
+      "city": "Ballina",
+      "country": "Australia",
+      "id": 3,
+      "name": "Lennox Head",
+      "state": "New South Wales",
+      "wave_image": "https://i0.heartyhosting.com/www.surfer.com/wp-content/uploads/2017/02/Safety-Not-Guaranteed_LennoxHead_Shield.jpg",
+      "wave_type": "Larger Right Point Break"
+    },
+    {
+      "city": "Cape Canaveral",
+      "country": "USA",
+      "id": 5,
+      "name": "Playalinda",
+      "state": "FL",
+      "wave_image": "test.png",
+      "wave_type": "Beachbreak"
+    }
+  ]
+}
+
+```
+
+### POST '/surf_contest/create'
+
+- Adds a new surf contest to the FSND Surf Tour.
+- Sample curl:
+- curl -X POST -H "Authorization: Bearer ${JWT_TOKEN}" http://localhost:5000/surf_contest/create -H "Content-Type: application/json" -d \
+  '{"surf_spot_id": 1,"contest_name": "Corys Ranch Pro 2","contest_date": "2021-08-09", \
+   "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg"}' \
+   http://localhost:5000/surf_contest/create
+- Sample response output:
+
+```
+{
+  "contest_count": 4,
+  "success": true,
+  "surf_contests": [
+    {
+      "contest_date": "Tue, 10 Aug 2021 00:00:00 GMT",
+      "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+      "contest_name": "Corys Trestles Pro",
+      "id": 1
+    },
+    {
+      "contest_date": "Fri, 10 Sep 2021 00:00:00 GMT",
+      "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+      "contest_name": "Corys Oaxaca Pro",
+      "id": 2
+    },
+    {
+      "contest_date": "Sun, 10 Oct 2021 00:00:00 GMT",
+      "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+      "contest_name": "Corys Rocky Pro",
+      "id": 3
+    },
+    {
+      "contest_date": "Mon, 09 Aug 2021 00:00:00 GMT",
+      "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg?&x=640&y=360&icq=74&sig=6b2950bebceae322b8455652f32ad8c9",
+      "contest_name": "Corys Ranch Pro 2",
+      "id": 4
+    }
+  ]
+}
+```
+
+### PATCH '/surf_contests/<int:contest_id>'
+
+- Modifies surf contest on the FSND Surf Tour.
+- Sample curl for changing the Surf Spot and Contest Date:
+- curl -X PATCH -H "Authorization: Bearer ${JWT_TOKEN}" http://localhost:5000/surf_contests/<int:contest_id> -H "Content-Type: application/json" -d \
+  '{"surf_spot_id": 1,"contest_date": "2021-08-09"}' \
+   http://localhost:5000/surf_contest/create
+- Sample response output:
+
+```
+{
+  "contest_count": 4,
+  "success": true,
+  "surf_contests": [
+    {
+      "contest_date": "Tue, 10 Aug 2021 00:00:00 GMT",
+      "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+      "contest_name": "Corys Trestles Pro",
+      "id": 1
+    },
+    {
+      "contest_date": "Fri, 10 Sep 2021 00:00:00 GMT",
+      "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+      "contest_name": "Corys Oaxaca Pro",
+      "id": 2
+    },
+    {
+      "contest_date": "Sun, 10 Oct 2021 00:00:00 GMT",
+      "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+      "contest_name": "Corys Rocky Pro",
+      "id": 3
+    },
+    {
+      "contest_date": "Mon, 09 Aug 2021 00:00:00 GMT",
+      "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg?&x=640&y=360&icq=74&sig=6b2950bebceae322b8455652f32ad8c9",
+      "contest_name": "Corys Ranch Pro 2",
+      "id": 5
+    }
+  ]
+}
+```
+
+### DELETE '/surf_spots/<int:spot_id>'
+
+- Removes a surf spot from the FSND Surf Tour.
+  if there are any contests hosted at this surf spot, they are automatically cancelled.
+- Sample curl:
+- curl -X DELETE -H "Authorization: Bearer ${JWT_TOKEN}" http://localhost:5000/surf_spots/1
+- Sample response output:
+
+```
+{
+  "deleted": 1,
+  "success": true,
+  "surf_spot_count": 3,
+  "surf_spots": [
+    {
+      "city": "San Onofre",
+      "country": "U.S.A",
+      "id": 2,
+      "name": "Lower Trestles",
+      "state": "CA",
+      "wave_image": "https://d3qf8nvav5av0u.cloudfront.net/image/5f8dfb006ab4cb4e27a4bde419b0fcbf.png",
+      "wave_type": "High Performance Left or Right"
+    },
+    {
+      "city": "Ballina",
+      "country": "Australia",
+      "id": 3,
+      "name": "Lennox Head",
+      "state": "New South Wales",
+      "wave_image": "https://i0.heartyhosting.com/www.surfer.com/wp-content/uploads/2017/02/Safety-Not-Guaranteed_LennoxHead_Shield.jpg",
+      "wave_type": "Larger Right Point Break"
+    },
+    {
+      "city": "Cape Canaveral",
+      "country": "USA",
+      "id": 6,
+      "name": "Playalinda",
+      "state": "FL",
+      "wave_image": "test.png",
+      "wave_type": "Beachbreak"
+    }
+  ]
+}
+```
+
+### DELETE '/surf_contests/<int:contest_id>'
+
+- Removes a surf spot from the FSND Surf Tour.
+  if there are any contests hosted at this surf spot, they are automatically cancelled.
+- Sample curl:
+- curl -X DELETE -H "Authorization: Bearer ${JWT_TOKEN}" http://localhost:5000/surf_contests/1
+- Sample response output:
+
+```
+{
+  "contest_count": 1,
+  "deleted": 2,
+  "success": true,
+  "surf_contests": [
+    {
+      "contest_date": "Sun, 10 Oct 2021 00:00:00 GMT",
+      "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+      "contest_name": "Corys Rocky Pro",
+      "id": 3
+    }
+  ]
+}
+```
+
+Sample JWT token for testing endpoints: ``
 
 ## Error Handling
 
@@ -384,14 +649,14 @@ Errors in our API are returned as JSON objects. Here's an example of an error fr
 
 ```
 
-The API will return three error types when requests fail:
+The API will return these error types when requests fail:
 
-- 401: Not Authorized
-- 403: Not Allowed
-- 400: Bad Request
+- 401: Not Authorized - e.g. no bearer token provided or token expired
+- 405: Not Allowed - e.g. POST/PATCH/DELETE for an endpoint when the endpoint doesn't support it
+- 403: Forbidden - e.g. authorization provided, but user is not allowed access
+- 400: Bad Request - Server couldn't process the request
 - 404: Resource Not Found
-- 405: Not Allowed
-- 422: Not Processable/Unprocessable
+- 422: Not Processable/Unprocessable - When the server can't process a request
 
 ## Setting up the Authentication
 
@@ -408,10 +673,18 @@ Setting up your own version of this API is easy with the help of Auth0.
     - delete:surf_spots
     - delete:surf_contests
 4.  Generate a JWT token using your Auth0 Applicaton URL so that you can access the JWT
-    Example https://fsnd-saylesc.us.auth0.com/authorize?audience=fsnd-surf-events&response_type=token&client_id=mqAYej6cSzNiLs53o6lHBaGvQTNPseaQ&redirect_uri=https://127.0.0.1:5000/login
+    Example: https://fsnd-saylesc.us.auth0.com/authorize?audience=fsnd-surf-events&response_type=token&client_id=mqAYej6cSzNiLs53o6lHBaGvQTNPseaQ&redirect_uri=https://127.0.0.1:5000/login
 5.  Based on the users credentials and assigned roles, the redirected page will provide the appropriate JWT
+6.  Update the following entries in the `setup.sh` replacing them with your Auth0 Application and API details.
+    - FLASK_APP
+    - AUTH0_DOMAIN
+    - API_AUDIENCE
 
 ## API Testing endpoints with Postman
+
+Testing this API can be performed in 2 ways: Postman collection tests, or Python Unit Tests
+
+### Postman Tests
 
 Create a Postman account and test the API Endpoints live: https://www.postman.com/
 
@@ -419,22 +692,13 @@ The App has been set up to run on Heroku, and the sample postman collection uses
 You can set up your own tests by starting with our test endpoints: `surf-events_postman_collection.json`
 You can import this collection into Postman and modify the {{host}} and the authentication using the JWTs generated form the previous steps.
 
-```
+### Python Unit Tests
+
+You can run the python unit tests after you have set up and run the application locally.
+Ensure that the flask application is running, then run the unit tests to test the endpoints.
+
+TODO: work on bearer tokens in unit tests
 
 ```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
+python test_flaskrsurf.py
 ```

@@ -353,7 +353,7 @@ def create_app(test_config=None):
                         "surf_contests": listSurfContests
                     })
         except Exception:
-            error = True
+            print(sys.exc_info())
             errorDescr = "Error creating new Surf Contest"
 
         return unprocessable(422, errorDescr)

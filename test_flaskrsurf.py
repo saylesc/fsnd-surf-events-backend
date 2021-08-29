@@ -135,7 +135,6 @@ class SurfEventsTestCase(unittest.TestCase):
 
         res = self.client().post('/surfers/search', json=search_criteria)
         data = json.loads(res.data)
-        print(data)
 
         # Verify results are positive
         self.assertEqual(res.status_code, 404)
