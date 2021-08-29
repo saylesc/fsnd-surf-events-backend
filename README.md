@@ -4,33 +4,32 @@ FSND Surf now has an API for staff to mange the various surf events taking place
 We opened our API to the public and give Surf Coordinator and Managers a utility to quickly access
 key Surf Events.
 
-# API
-
-## Surf Events API Overview
+# Surf Events API Overview
 
 FSND-Surf is invested in creating an API that is available to the public, as well as official staff members. The public can now gain access to the information about our surf Events - including surfers, surf locations, and contests.
 
-## Getting Started
+# Getting Started
 
-### API URL
-
-The URL for the API is located at https://capstone-surf-events.herokuapp.com/login
-
-## Tech Stack (Dependencies)
+## Tech Stack
 
 Our tech stack will include the following:
 
-- **virtualenv** as a tool to create isolated Python environments
-  - flask db init
-  - flask db migrate
-  - flask db uprade
 - **SQLAlchemy ORM** to be our ORM library of choice
 - **PostgreSQL** as our database of choice
 - **Python3** and **Flask** as our server language and server framework
 - **Flask-Migrate** for creating and running schema migrations
-  You can download and install the dependencies mentioned above using `pip` as:
+- **virtualenv** as a tool to create isolated Python environments
 
-#### PIP Dependencies
+## Setup Virtual Environment
+
+Setup a virtual environment:
+
+```
+virtual surf-events
+. surf-events/bin/activate
+```
+
+## PIP Dependencies
 
 Setup a virtual environment and install all necessary dependencies for this application using the following command:
 
@@ -40,62 +39,313 @@ pip install -r requirements.txt
 
 This will install all of the required packages.
 
-## PUBLIC API URL
+## Setup Database and Perform Database Migration
 
-#### Anyone can:
+### Create your database:
 
-- View Surf Contests
+```
+createdb surf-events
+```
 
-  Example: curl -X GET https://capstone-surf-events.herokuapp.com/surf_contests
+### Setup Database using migrations
+
+```
+flask db uprade
+```
+
+## Running the server
+
+Source the setup
+
+```
+. setup.sh
+```
+
+Run the backend using:
+
+```
+flask run
+```
+
+## API URL
+
+### Heroku API URL
+
+This application is currently hosted on Heroku.
+The URL for the API is located at https://capstone-surf-events.herokuapp.com/login
+
+### Local API URL
+
+When you run the flask application locally, the URl for the
+URL for the API is located at https://localhost/login
+
+## PUBLIC API
+
+### GET '/surfers'
+
+- Returns a list of all surfers on the FSND Surf Tour.
+- Sample curl:
+- curl -X GET http://localhost:5000/surfers
+- Sample response output:
 
 ```
 {
+  "success": true,
+  "surfers": [
+    {
+      "id": 1,
+      "surfer_age": 40,
+      "surfer_hometown": "Penrith, New South Wales, Australia",
+      "surfer_name": "Mick Fanning",
+      "surfer_ranking": 50,
+      "surfer_stance": "Regular"
+        },
+    {
+      "id": 2,
+      "surfer_age": 49,
+      "surfer_hometown": "Cocoa Beach, FL",
+      "surfer_name": "Kelly Slater",
+      "surfer_ranking": 18,
+      "surfer_stance": "Regular"
+    },
+    ...
+```
+
+### GET '/surfers/<surfer_id>'
+
+- Returns a specific surfer, by id, on the FSND Surf Tour.
+- Sample curl:
+- curl -X GET http://localhost:5000/surfers/1
+- Sample response output:
+
+```
+{
+  "success": true,
+  "surfer_info": {
+    "id": 1,
+    "surfer_age": 40,
+    "surfer_hometown": "Penrith, New South Wales, Australia",
+    "surfer_name": "Mick Fanning",
+    "surfer_ranking": 50,
+    "surfer_stance": "Regular"
+  }
+}
+
+```
+
+### POST '/surfers/search'
+
+- Returns a list of surfers on the FSND Surf Tour that match search criteria
+- Using the `/surfers/search` API call, you can pass in search terms to find surfers by name (case insensitive).
+- Example: curl -X POST -H "Content-Type: application/json" -d '{"search_term":"Kel"}' https://capstone-surf-events.herokuapp.com/surfers/search
+- Sample response output:
+
+```
+{
+    "count":1,
     "success":true,
-    "surf_spots":[
+    "surfers":[
         {
-            "city":"Oaxaca",
-            "country":"Mexico",
-            "id":1,
-            "name":"Barra de la Cruz",
-            "state":"N/A",
-            "wave_image":"https://d3qf8nvav5av0u.cloudfront.net/image/6c61c6bfe9f3aa5ef089dae6d336cd04.jpg",
-            "wave_type":"Rocky Right Point Break"},
-        {
-            "city":"Ballina",
-            "country":"Australia",
-            "id":3,
-            "name":"Lennox Head",
-            "state":"New South Wales",
-            "wave_image":"https://i0.heartyhosting.com/www.surfer.com/wp-content/uploads/2017/02/Safety-Not-Guaranteed_LennoxHead_Shield.jpg",
-            "wave_type":"Larger Right Point Break"},
-        {
-            "city":"Cape Canaveral",
-            "country":"USA",
-            "id":5,
-            "name":"Playalinda",
-            "state":"FL",
-            "wave_image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3aaWHaOtRM9JXl2IVAcLWDysWvjsiRbQHFqmsSAf4ShmS8j3AHN95I9TLxsPWVApAkSk&usqp=CAU","wave_type":"Beachbreak"
+            "id":2,
+            "surfer_age":49,
+            "surfer_hometown":"Cocoa Beach, FL",
+            "surfer_name":"Kelly Slater",
+            "surfer_ranking":18,"surfer_stance":"Regular"
         }
     ]
 }
 ```
 
-- View Specific Surf Contests
-  Example: curl -X GET https://capstone-surf-events.herokuapp.com/surf_contests/1
-- View Surf Spots
-  Example: curl -X GET https://capstone-surf-events.herokuapp.com/surf_spots
-- View All Surfers
-  Example: curl -X GET https://capstone-surf-events.herokuapp.com/surfers
-- Search for Surfers
-  Using the `/surfers/search` API call, you can pass in search terms to find surfers by name.
-  Example: curl -X POST -H "Content-Type: application/json" -d '{"search_term":"Kel"}' https://capstone-surf-events.herokuapp.com/surfers/search
-- View Individual Surfer Info
-  You can also filter by specific surfers using the id
-  Example: curl -X GET https://capstone-surf-events.herokuapp.com/surfers/2
+### GET '/surf_spots'
+
+- Returns a list of all surf spots currently on the FSND Surf Tour.
+- Sample curl:
+- curl -X GET http://localhost:5000/surf_spots
+- Sample response output:
+
+```
+{
+  "success": true,
+  "surf_spots": [
+    {
+      "city": "Oaxaca",
+      "country": "Mexico",
+      "id": 1,
+      "name": "Barra de la Cruz",
+      "state": "N/A",
+      "wave_image": "https://d3qf8nvav5av0u.cloudfront.net/image/6c61c6bfe9f3aa5ef089dae6d336cd04.jpg",
+      "wave_type": "Rocky Right Point Break"
+    },
+    {
+      "city": "San Onofre",
+      "country": "U.S.A",
+      "id": 2,
+      "name": "Lower Trestles",
+      "state": "CA",
+      "wave_image": "https://d3qf8nvav5av0u.cloudfront.net/image/5f8dfb006ab4cb4e27a4bde419b0fcbf.png",
+      "wave_type": "High Performance Left or Right"
+    },
+    ...
+```
+
+### GET '/surf_spots/<int:spot_id>'
+
+- Returns a specific surf spot on the FSND Surf Tour.
+- Sample curl:
+- curl -X GET http://localhost:5000/surf_spots/1
+- Sample response output:
+
+```
+{
+  "success": true,
+  "surf_spot": {
+    "city": "Oaxaca",
+    "country": "Mexico",
+    "id": 1,
+    "name": "Barra de la Cruz",
+    "state": "N/A",
+    "wave_image": "https://d3qf8nvav5av0u.cloudfront.net/image/6c61c6bfe9f3aa5ef089dae6d336cd04.jpg",
+    "wave_type": "Rocky Right Point Break"
+  }
+}
+```
+
+### GET '/surf_contests'
+
+- Returns a list of all surf contests currently on the FSND Surf Tour.
+- Sample curl:
+- curl -X GET http://localhost:5000/surf_contests
+- Sample response output:
+
+```
+
+{
+"success": true,
+"surf_contests": [
+{
+"contest_date": "Tue, 10 Aug 2021 00:00:00 GMT",
+"contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+"contest_name": "Corys Trestles Pro",
+"id": 1
+},
+{
+"contest_date": "Fri, 10 Sep 2021 00:00:00 GMT",
+"contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+"contest_name": "Corys Oaxaca Pro",
+"id": 2
+},
+
+```
+
+### GET '/surf_contests/<int:contest_id>'
+
+- Returns a specific surf contest hosted by the FSND Surf Tour.
+- Sample curl:
+- curl -X GET http://localhost:5000/surf_contests/1
+- Sample response output:
+
+```
+
+{
+"success": true,
+"surf_contest": {
+"contest_date": "Tue, 10 Aug 2021 00:00:00 GMT",
+"contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+"contest_name": "Corys Trestles Pro",
+"id": 1
+}
+}
+
+```
+
+### GET 'surf_spots/<int:spot_id>/contests'
+
+- Returns a list of all surf contests hosted at a specific spot on the FSND Surf Tour.
+- Sample curl:
+- curl -X GET http://localhost:5000/surf_spots/1/contests
+- Sample response output:
+
+```
+{
+  "success": true,
+  "surf_contests": [
+    {
+      "contest_date": "Tue, 10 Aug 2021 00:00:00 GMT",
+      "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+      "contest_name": "Corys Trestles Pro",
+      "id": 1
+    }
+  ],
+  "surf_spot": {
+    "city": "Oaxaca",
+    "country": "Mexico",
+    "id": 1,
+    "name": "Barra de la Cruz",
+    "state": "N/A",
+    "wave_image": "https://d3qf8nvav5av0u.cloudfront.net/image/6c61c6bfe9f3aa5ef089dae6d336cd04.jpg",
+    "wave_type": "Rocky Right Point Break"
+  }
+}
+
+```
+
+## Restricted API
+
+This application runs with a restricted API for Surf Manager and Surf Coordinator Roles
+A token needs to be passed to each endpoint.
+The following only works for /products endpoints:
+The token can be retrived by following these steps:
+
+1. Go to https: https://warranty-tracker.herokuapp.com
+2. Click on Login and enter any credentials into the Auth0 login page. The role is automatically assigned by Auth0.
+   Alternatively, sample account that has already been created can be used:
+   Email: test_user_role@gmail.com
+   Password: test1234!
 
 ## Surf Manager
 
-#### Surf Managers can perform all Public API calls plus the following:
+Surf Managers can perform all Public API calls.
+Surf managers can only add and remove surfers from surf contests using the below API calls
+
+### PATCH '/add_surf_contestant/<int:contest_id>/<int:surfer_id>'
+
+- Adds a specific surfer to a contest on the FSND Surf Tour.
+- Sample curl:
+- curl -X PATCH http://localhost:5000/add_surf_contestant/1/1
+- Sample response output:
+
+```
+{
+  "contest_info": {
+    "contest_date": "Tue, 10 Aug 2021 00:00:00 GMT",
+    "contest_image": "https://d3qf8nvav5av0u.cloudfront.net/image/fa2b2318a96b6c2bce7bad3a8756e5ec.jpg",
+    "contest_name": "Corys Trestles Pro",
+    "id": 1
+  },
+  "success": true,
+  "surfers": [
+    {
+      "id": 1,
+      "surfer_age": 40,
+      "surfer_hometown": "Penrith, New South Wales, Australia",
+      "surfer_name": "Mick Fanning",
+      "surfer_ranking": 50,
+      "surfer_stance": "Regular"
+    }
+  ]
+}
+```
+
+- Sample response output if surfer already exists:
+
+```
+{
+  "description": "Surfer is already entered in contest",
+  "error": 422,
+  "message": "unprocessable",
+  "success": false
+}
+```
 
 Sample JWT token for testing endpoints: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTMzOTQ5NTc3ODc3NDA4Nzk3MDIiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2MjkwNTg2NTksImV4cCI6MTYyOTEwMTg1OSwiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsicGF0Y2g6YWRkX3N1cmZlciIsInBhdGNoOnJlbW92ZV9zdXJmZXIiXX0.HvO2M2q-iVS0FeP2ErVDviw-EphWKSniogLtndrG-RrepEPKSSvUsmhGcOBk8zBaz-_PqbLBHDwjEUmwsDO3BkN4jKWvXaS9pSR6-FL-Jbr2Yt6SpyUyoYRjvkra65RG_QBx0ILlA63yjny1O5UeWGe-2FKNC6IjUWH0_GbQbmgJcruwdDttvDvCWzggI1H-g7A_0QPp8iehD6A4UNJoznnRAq4ZoeU_7ZoejIOFf0rmDDmY4v1kkN1f2TqcK4TV42xTVze8nTpgVZWsvmmiZH0iplVmwnaPSZQP4JB9bkSLT8ELQ_tljp04Fzp0vr_0JBVHsM8IeK393qQZcHsZHA`
 
@@ -168,3 +418,23 @@ Create a Postman account and test the API Endpoints live: https://www.postman.co
 The App has been set up to run on Heroku, and the sample postman collection uses the URL: https://capstone-surf-events.herokuapp.com/login
 You can set up your own tests by starting with our test endpoints: `surf-events_postman_collection.json`
 You can import this collection into Postman and modify the {{host}} and the authentication using the JWTs generated form the previous steps.
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```

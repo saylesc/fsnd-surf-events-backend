@@ -5,11 +5,8 @@ from models import setup_db, rollback_db, SurfSpot, Surfer, SurfContest
 from auth.auth import AuthError, requires_auth
 from flask_cors import CORS
 
-
 # Create app, setup DB, apply CORS
 def create_app(test_config=None):
-    print("__name__ = ")
-    print(__name__)
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
@@ -156,17 +153,17 @@ def create_app(test_config=None):
             for surfer in surfers:
                 surferSearchResults.append(surfer.format())
 
+            if len(surfers) <= 0:
+                return no_resource(404)
+
             return jsonify({
                 "success": True,
                 "count": len(surfers),
                 "surfers": surferSearchResults
             })
+
         except Exception:
-            return jsonify({
-                "success": True,
-                "count": len(surfers),
-                "surfers": surferSearchResults
-            })
+            return no_resource(404)
 
     '''
     RESTRICTED ACCESS API
@@ -308,6 +305,7 @@ def create_app(test_config=None):
                     "surf_spots": listSurfSpots
                 })
         except Exception:
+            print(sys.exc_info())
             return unprocessable(422, "Unable to create new Surf Spot")
 
     '''POST route for Creating Surf Contests'''

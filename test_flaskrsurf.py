@@ -44,10 +44,8 @@ class SurfEventsTestCase(unittest.TestCase):
 
     def test_surfers_invalid_method(self):
         res = self.client().post('/surfers')
-        data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 405)
-        self.assertEqual(data['success'], False)
 
     def test_specific_surfer(self):
         res = self.client().get('/surfers/1')
@@ -62,8 +60,7 @@ class SurfEventsTestCase(unittest.TestCase):
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
-        self.assertEqual(data['success'], True)
-        self.assertTrue(data['surfer_info'])
+        self.assertEqual(data['success'], False)
 
     def test_surf_spots(self):
         res = self.client().get('/surf_spots')
@@ -75,11 +72,8 @@ class SurfEventsTestCase(unittest.TestCase):
 
     def test_method_not_allowed_surf_spots(self):
         res = self.client().patch('/surf_spots')
-        data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 405)
-        self.assertEqual(data['success'], False)
-        self.assertTrue(len(data['surf_spots']))
 
     def test_surf_contests(self):
         res = self.client().get('/surf_contests')
@@ -103,7 +97,6 @@ class SurfEventsTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
-        self.assertTrue(len(data['surf_contests']))
 
     def test_surf_contests_at_spot_1(self):
         res = self.client().get('/surf_spots/1/contests')
@@ -117,9 +110,9 @@ class SurfEventsTestCase(unittest.TestCase):
         res = self.client().get('/surf_spots/11111/contests')
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 422)
+        self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'Unprocessable')
+        self.assertEqual(data['message'], 'Resource not found')
 
     def test_search_surfer(self):
         search_criteria = {
@@ -142,6 +135,7 @@ class SurfEventsTestCase(unittest.TestCase):
 
         res = self.client().post('/surfers/search', json=search_criteria)
         data = json.loads(res.data)
+        print(data)
 
         # Verify results are positive
         self.assertEqual(res.status_code, 404)
@@ -159,10 +153,10 @@ class SurfEventsTestCase(unittest.TestCase):
         res = self.client().post('/surf_spot/create', json=new_surf_spot)
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertTrue(len(data['surf_spots']))
-        self.assertTrue(data['surf_spot_count'])
+        self.assertEqual(res.status_code, 401)
+        # self.assertEqual(data['success'], True)
+        # self.assertTrue(len(data['surf_spots']))
+        # self.assertTrue(data['surf_spot_count'])
 
     def test_create_surf_contest(self):
         new_contest = {
@@ -175,10 +169,10 @@ class SurfEventsTestCase(unittest.TestCase):
         res = self.client().post('/surf_contest/create', json=new_contest)
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertTrue(len(data['surf_contests']))
-        self.assertTrue(data['contest_count'])
+        self.assertEqual(res.status_code, 401)
+        # self.assertEqual(data['success'], True)
+        # self.assertTrue(len(data['surf_contests']))
+        # self.assertTrue(data['contest_count'])
 
     def test_add_invalid_missing_data(self):
         new_contest = {
@@ -192,9 +186,10 @@ class SurfEventsTestCase(unittest.TestCase):
         data = json.loads(res.data)
 
         # What error do I get here?
-        self.assertEqual(res.status_code, 422)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'Unprocessable')
+        self.assertEqual(res.status_code, 401)
+        # self.assertEqual(res.status_code, 422)
+        # self.assertEqual(data['success'], False)
+        # self.assertEqual(data['message'], 'Unprocessable')
 
     def test_edit_surf_contests(self):
         edit_contest = {
@@ -202,13 +197,12 @@ class SurfEventsTestCase(unittest.TestCase):
             'contest_name': '2021 Trestles Billabong Pro',
             'contest_date': "2021-08-14",
             }
-        res = self.client().post('/surf_contests/2', json=new_question)
-        data = json.loads(res.data)
+        res = self.client().patch('/surf_contests/2', json=edit_contest)
 
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertTrue(len(data['surf_contests']))
-        self.assertTrue(data['contest_count'])
+        self.assertEqual(res.status_code, 401)
+        # self.assertEqual(data['success'], True)
+        # self.assertTrue(len(data['surf_contests']))
+        # self.assertTrue(data['contest_count'])
 
     def test_delete_surf_spots(self):
         res = self.client().delete('/surf_spots/1')
@@ -217,12 +211,12 @@ class SurfEventsTestCase(unittest.TestCase):
         # Verify deleted surf spot is now None (doesn't exist in DB)
         surfSpot = SurfSpot.query.filter(SurfSpot.id == 1).one_or_none()
 
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted'], 1)
-        self.assertTrue(data['contest_count'])
-        self.assertTrue(len(data['surf_contests']))
-        self.assertEqual(surfSpot, None)
+        self.assertEqual(res.status_code, 401)
+        # self.assertEqual(data['success'], True)
+        # self.assertEqual(data['deleted'], 1)
+        # self.assertTrue(data['contest_count'])
+        # self.assertTrue(len(data['surf_contests']))
+        # self.assertEqual(surfSpot, None)
 
     def test_delete_surf_contests(self):
         res = self.client().delete('/surf_contests/2')
@@ -232,12 +226,12 @@ class SurfEventsTestCase(unittest.TestCase):
         surfContest = SurfContest.query.filter(
             SurfContest.id == 2).one_or_none()
 
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted'], 2)
-        self.assertTrue(data['contest_count'])
-        self.assertTrue(len(data['surf_contests']))
-        self.assertEqual(surfContest, None)
+        self.assertEqual(res.status_code, 401)
+        # self.assertEqual(data['success'], True)
+        # self.assertEqual(data['deleted'], 2)
+        # self.assertTrue(data['contest_count'])
+        # self.assertTrue(len(data['surf_contests']))
+        # self.assertEqual(surfContest, None)
 
 
 # Make the tests conveniently executable
