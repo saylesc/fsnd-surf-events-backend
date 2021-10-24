@@ -25,7 +25,7 @@ Our tech stack will include the following:
 Setup a virtual environment:
 
 ```
-virtual surf-events
+virtualenv surf-events
 . surf-events/bin/activate
 ```
 
@@ -326,15 +326,10 @@ URL for the API is located at https://localhost:5000/login
 ## Restricted API
 
 This application runs with a restricted API for Surf Manager and Surf Coordinator Roles
-A token needs to be passed to each endpoint.
-The following only works for /products endpoints:
-The token can be retrived by following these steps:
+A token needs to be passed to each endpoint. Use the following tokens to access the roles.
 
-1. Go to https: https://warranty-tracker.herokuapp.com
-2. Click on Login and enter any credentials into the Auth0 login page. The role is automatically assigned by Auth0.
-   Alternatively, sample account that has already been created can be used:
-   Email: test_user_role@gmail.com
-   Password: test1234!
+1. Surf Coordinator: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTc1OTk3NTk0ODIxODcwMzM5MTMiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2MzUxMTA3NzIsImV4cCI6MTYzNTE1Mzk3MiwiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOnN1cmZfY29udGVzdHMiLCJkZWxldGU6c3VyZl9zcG90cyIsInBhdGNoOmFkZF9zdXJmZXIiLCJwYXRjaDpyZW1vdmVfc3VyZmVyIiwicGF0Y2g6c3VyZl9jb250ZXN0IiwicG9zdDpzdXJmX2NvbnRlc3RzIiwicG9zdDpzdXJmX3Nwb3RzIl19.xOE3aod1y6AS0BGw9eoqtAp5fMnH97w7R-gXFcKweA_6zrgPSTP31VWJfLleZ-Ttwpcyf19l7y66NajiAyI9z62lSGfaXa4JU7hdnBDPOs1nbMW92oZGkc6i8KCqV3zkls6CW_Ky_VSuk5lw3yZNOtZbu8S_JCVomBpLn9Lzbae4BG8IfT5sCqthKCEbpmtxGxblojvdtg4Rt7OHBGN2vs5-HMxTaDcQaTIN2WkyP0wRK4V5U7VuAh9wrsPW4mv1113S42TeowmrUx0zMHmm7oqDq_zt4_kG4uSmY3rrE8k198g8mZSsJr2bIX-0jK1q2Y9Ombr9lVCltv4ZJWSA3Q`
+2. Surf Manager: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTMzOTQ5NTc3ODc3NDA4Nzk3MDIiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2MzUxMTA5MzAsImV4cCI6MTYzNTE1NDEzMCwiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsicGF0Y2g6YWRkX3N1cmZlciIsInBhdGNoOnJlbW92ZV9zdXJmZXIiXX0.l_Thp4P-v4Bx1qkYTnrISH034Ptuyanh9d1pvEs1-nHNjwt8-iY3EBUXo4s3kaXf-fyXCxhv92yC3QyFh-a1mnyyo5fWE-GAcRBcxon3cVnbJ2y3FISpDejgM0RNml20M0TwQpLKUJe6kMQpyRQN6WRbgRPf77Sc4o_0oKrP6gxR8o3gMkOARgxu0PQUZjftnyRgBIJOfRURd4gGwtBzfsYqxM6MLV_D1fl4R6kNyf0RibIRvD_ylX_ISYVi3VY8jRTdfdARQS1TV5jUAabEsMXJSNLaEVo2GD_rdWfwpwkVL5QeyYicP4lALnqk_t0lRn3OSR9wNlWPklBzBiO7xA`
 
 ## Surf Manager
 
@@ -696,8 +691,6 @@ You can import this collection into Postman and modify the {{host}} and the auth
 
 You can run the python unit tests after you have set up and run the application locally.
 Ensure that the flask application is running, then run the unit tests to test the endpoints.
-
-TODO: work on bearer tokens in unit tests
 
 ```
 python test_flaskrsurf.py

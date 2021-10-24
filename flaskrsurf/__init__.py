@@ -5,6 +5,7 @@ from models import setup_db, rollback_db, SurfSpot, Surfer, SurfContest
 from auth.auth import AuthError, requires_auth
 from flask_cors import CORS
 
+
 # Create app, setup DB, apply CORS
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -550,6 +551,7 @@ def create_app(test_config=None):
         }), authError.status_code
 
     return app
+
 
 app = create_app()
 

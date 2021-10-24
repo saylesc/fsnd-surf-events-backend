@@ -6,9 +6,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flaskrsurf import create_app
 from models import setup_db, SurfSpot, SurfContest, Surfer
 
+surfManagerToken = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTMzOTQ5NTc3ODc3NDA4Nzk3MDIiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2MzUxMTA5MzAsImV4cCI6MTYzNTE1NDEzMCwiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsicGF0Y2g6YWRkX3N1cmZlciIsInBhdGNoOnJlbW92ZV9zdXJmZXIiXX0.l_Thp4P-v4Bx1qkYTnrISH034Ptuyanh9d1pvEs1-nHNjwt8-iY3EBUXo4s3kaXf-fyXCxhv92yC3QyFh-a1mnyyo5fWE-GAcRBcxon3cVnbJ2y3FISpDejgM0RNml20M0TwQpLKUJe6kMQpyRQN6WRbgRPf77Sc4o_0oKrP6gxR8o3gMkOARgxu0PQUZjftnyRgBIJOfRURd4gGwtBzfsYqxM6MLV_D1fl4R6kNyf0RibIRvD_ylX_ISYVi3VY8jRTdfdARQS1TV5jUAabEsMXJSNLaEVo2GD_rdWfwpwkVL5QeyYicP4lALnqk_t0lRn3OSR9wNlWPklBzBiO7xA'
+surfCoordinatorToken = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InpMWEtodFZhWnkxWWloaVVpY3ItayJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtc2F5bGVzYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMTc1OTk3NTk0ODIxODcwMzM5MTMiLCJhdWQiOlsiZnNuZC1zdXJmLWV2ZW50cyIsImh0dHBzOi8vZnNuZC1zYXlsZXNjLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2MzUxMTA3NzIsImV4cCI6MTYzNTE1Mzk3MiwiYXpwIjoibXFBWWVqNmNTek5pTHM1M282bEhCYUd2UVROUHNlYVEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOnN1cmZfY29udGVzdHMiLCJkZWxldGU6c3VyZl9zcG90cyIsInBhdGNoOmFkZF9zdXJmZXIiLCJwYXRjaDpyZW1vdmVfc3VyZmVyIiwicGF0Y2g6c3VyZl9jb250ZXN0IiwicG9zdDpzdXJmX2NvbnRlc3RzIiwicG9zdDpzdXJmX3Nwb3RzIl19.xOE3aod1y6AS0BGw9eoqtAp5fMnH97w7R-gXFcKweA_6zrgPSTP31VWJfLleZ-Ttwpcyf19l7y66NajiAyI9z62lSGfaXa4JU7hdnBDPOs1nbMW92oZGkc6i8KCqV3zkls6CW_Ky_VSuk5lw3yZNOtZbu8S_JCVomBpLn9Lzbae4BG8IfT5sCqthKCEbpmtxGxblojvdtg4Rt7OHBGN2vs5-HMxTaDcQaTIN2WkyP0wRK4V5U7VuAh9wrsPW4mv1113S42TeowmrUx0zMHmm7oqDq_zt4_kG4uSmY3rrE8k198g8mZSsJr2bIX-0jK1q2Y9Ombr9lVCltv4ZJWSA3Q'
 
 class SurfEventsTestCase(unittest.TestCase):
     """This class represents the Surf Events test case"""
+
 
     def setUp(self):
         """Define test variables and initialize app."""
@@ -48,7 +51,7 @@ class SurfEventsTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 405)
 
     def test_specific_surfer(self):
-        res = self.client().get('/surfers/1')
+        res = self.client().get('/surfers/43')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -149,29 +152,33 @@ class SurfEventsTestCase(unittest.TestCase):
             'wave_image': "test.png"
             }
 
-        res = self.client().post('/surf_spot/create', json=new_surf_spot)
+        headers = {
+            'Authorization': surfCoordinatorToken
+        }
+        res = self.client().post('/surf_spot/create', headers=headers, json=new_surf_spot)
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 401)
-        # self.assertEqual(data['success'], True)
-        # self.assertTrue(len(data['surf_spots']))
-        # self.assertTrue(data['surf_spot_count'])
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(len(data['surf_spots']))
+        self.assertTrue(data['surf_spot_count'])
 
     def test_create_surf_contest(self):
         new_contest = {
             'surf_spot_id': 1,
             'contest_name': '2021 Volcom Pro',
-            'contest_date': "2021-08-14",
-            'contest_image': "test.png"
+            'contest_date': '2021-11-14',
+            'contest_image': 'test.png'
             }
 
-        res = self.client().post('/surf_contest/create', json=new_contest)
+        headers = {
+            'Authorization': surfCoordinatorToken
+        }
+        res = self.client().post('/surf_contest/create', headers=headers, json=new_contest)
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 401)
-        # self.assertEqual(data['success'], True)
-        # self.assertTrue(len(data['surf_contests']))
-        # self.assertTrue(data['contest_count'])
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(len(data['surf_contests']))
+        self.assertTrue(data['contest_count'])
 
     def test_add_invalid_missing_data(self):
         new_contest = {
@@ -181,14 +188,16 @@ class SurfEventsTestCase(unittest.TestCase):
             'contest_image': "test.png"
             }
 
-        res = self.client().post('/surf_contest/create', json=new_contest)
+        headers = {
+            'Authorization': surfCoordinatorToken
+        }
+        res = self.client().post('/surf_contest/create', headers=headers, json=new_contest)
         data = json.loads(res.data)
 
         # What error do I get here?
-        self.assertEqual(res.status_code, 401)
-        # self.assertEqual(res.status_code, 422)
-        # self.assertEqual(data['success'], False)
-        # self.assertEqual(data['message'], 'Unprocessable')
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
 
     def test_edit_surf_contests(self):
         edit_contest = {
@@ -196,41 +205,67 @@ class SurfEventsTestCase(unittest.TestCase):
             'contest_name': '2021 Trestles Billabong Pro',
             'contest_date': "2021-08-14",
             }
-        res = self.client().patch('/surf_contests/2', json=edit_contest)
 
-        self.assertEqual(res.status_code, 401)
-        # self.assertEqual(data['success'], True)
-        # self.assertTrue(len(data['surf_contests']))
-        # self.assertTrue(data['contest_count'])
+        headers = {
+            'Authorization': surfCoordinatorToken
+        }
+        res = self.client().patch('/surf_contests/2', headers=headers, json=edit_contest)
+        data = json.loads(res.data)
+
+        # Verify by checking http://localhost:5000/surf_spots/2/contests
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['surf_contests']))
+        self.assertTrue(data['contest_count'])
 
     def test_delete_surf_spots(self):
-        res = self.client().delete('/surf_spots/1')
-        data = json.loads(res.data)
+        headers = {
+            'Authorization': surfCoordinatorToken
+        }
+
+        res = self.client().delete('/surf_spots/1', headers=headers)
 
         # Verify deleted surf spot is now None (doesn't exist in DB)
         surfSpot = SurfSpot.query.filter(SurfSpot.id == 1).one_or_none()
 
-        self.assertEqual(res.status_code, 401)
-        # self.assertEqual(data['success'], True)
-        # self.assertEqual(data['deleted'], 1)
-        # self.assertTrue(data['contest_count'])
-        # self.assertTrue(len(data['surf_contests']))
-        # self.assertEqual(surfSpot, None)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['deleted'], 1)
+        self.assertEqual(surfSpot, None)
 
     def test_delete_surf_contests(self):
-        res = self.client().delete('/surf_contests/2')
+        headers = {
+            'Authorization': surfCoordinatorToken
+        }
+
+        res = self.client().delete('/surf_contests/2', headers=headers)
         data = json.loads(res.data)
 
         # Verify deleted surf contest is now None (doesn't exist in DB)
         surfContest = SurfContest.query.filter(
             SurfContest.id == 2).one_or_none()
 
-        self.assertEqual(res.status_code, 401)
-        # self.assertEqual(data['success'], True)
-        # self.assertEqual(data['deleted'], 2)
-        # self.assertTrue(data['contest_count'])
-        # self.assertTrue(len(data['surf_contests']))
-        # self.assertEqual(surfContest, None)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['deleted'], 2)
+        self.assertTrue(data['contest_count'])
+        self.assertTrue(len(data['surf_contests']))
+        self.assertEqual(surfContest, None)
+
+    def test_delete_surf_contests_invalid_token(self):
+        headers = {
+            'Authorization': surfManagerToken
+        }
+
+        res = self.client().delete('/surf_contests/2', headers=headers)
+        data = json.loads(res.data)
+
+        # Verify deleted surf contest is now None (doesn't exist in DB)
+        surfContest = SurfContest.query.filter(
+            SurfContest.id == 2).one_or_none()
+
+        self.assertEqual(res.status_code, 403)
+        self.assertEqual(data['success'], False)
 
 
 # Make the tests conveniently executable
